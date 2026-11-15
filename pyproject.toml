@@ -6,6 +6,7 @@ build-backend = "setuptools.build_meta"
 name = "llm-person-searcher"
 version = "0.1.0"
 description = "Natural-language person search over annotated CCTV frames"
+readme = "README.md"
 requires-python = ">=3.10"
 dependencies = [
     "pydantic>=2.7,<3",
@@ -16,6 +17,10 @@ dependencies = [
 ollama = ["ollama>=0.3"]
 yolo = ["ultralytics>=8.3"]
 dev = ["pytest>=8.0"]
+hybrid = ["numpy>=1.24", "opencv-python-headless>=4.8,<5", "onnxruntime>=1.17"]
+
+[project.scripts]
+person-image-search = "person_searcher.image_cli:main"
 
 [tool.setuptools.packages.find]
 where = ["src"]

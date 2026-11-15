@@ -1,5 +1,17 @@
 # LLMPersonSearcher
 
+## Image-based search
+
+The `feature/image-based-search` branch adds an installable `person-image-search`
+command and Python `ImageSearcher` API over the existing detection database.
+It ranks all filtered detections before applying the result limit and caches
+versioned visual features in SQLite. The default Pillow histogram backend has
+no ML-service dependency; face/body/clothing matching is available through the
+optional `hybrid` extra.
+
+See [image-search setup, testing and handoff instructions](docs/image-search.md)
+for Windows commands, customer-sample checks, optional models and the Python API.
+
 ## YOLO 인물 탐지
 
 YOLO는 현재 환경에 자동으로 포함되지 않는 선택 의존성입니다. 설치하면

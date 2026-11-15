@@ -20,9 +20,9 @@ class DetectionRepository:
         video_id: Optional[str] = None,
         global_id: Optional[str] = None,
         category: Optional[str] = None,
-        limit: int = 100,
+        limit: Optional[int] = 100,
     ) -> List[Dict[str, object]]:
-        if limit <= 0:
+        if limit is not None and limit <= 0:
             raise ValueError("limit must be greater than zero.")
 
         clauses = []
@@ -47,8 +47,10 @@ class DetectionRepository:
         """
         if clauses:
             query += " WHERE " + " AND ".join(clauses)
-        query += " ORDER BY video_id, frame_number, annotation_index LIMIT ?"
-        parameters.append(limit)
+        query += " ORDER BY video_id, frame_number, annotation_index"
+        if limit is not None:
+            query += " LIMIT ?"
+            parameters.append(limit)
 
         with sqlite3.connect(self.database_path) as connection:
             connection.row_factory = sqlite3.Row
@@ -74,11 +76,11 @@ class DetectionRepository:
         self,
         condition: PersonSearchCondition,
         *,
-        limit: int = 100,
+        limit: Optional[int] = 100,
     ) -> List[Dict[str, object]]:
         """Find detections whose stored attributes satisfy every query item."""
 
-        if limit <= 0:
+        if limit is not None and limit <= 0:
             raise ValueError("limit must be greater than zero.")
         if condition.gender:
             raise ValueError(
@@ -136,9 +138,10 @@ class DetectionRepository:
         query += """
             ORDER BY detection.video_id, detection.frame_number,
                      detection.annotation_index
-            LIMIT ?
         """
-        parameters.append(limit)
+        if limit is not None:
+            query += " LIMIT ?"
+            parameters.append(limit)
 
         with sqlite3.connect(self.database_path) as connection:
             connection.row_factory = sqlite3.Row
